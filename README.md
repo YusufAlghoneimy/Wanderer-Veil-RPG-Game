@@ -153,4 +153,4 @@ The game is currently still a WIP, will add the instructions as soon as I'm done
 
 ## Code Usage
 
-Feel free to use any part of this code in your own projects, personal, educational, or commercial. No credit or permission required. I’m just happy if it helps someone else.
+Feel free to use any part of this code in your own projects, personal, educational, or commercial. No credit or permission required.
