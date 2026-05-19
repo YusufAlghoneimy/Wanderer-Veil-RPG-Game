@@ -36,19 +36,14 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
         }
     }
 
-    /// <summary>
-    /// Triggers the death animation. Called by PlayerHealth when the player dies.
-    /// </summary>
+   
     public void PlayDeathAnimation()
     {
         if (isPlayingDeathAnimation) return; // Prevent multiple calls
 
         isPlayingDeathAnimation = true;
 
-        // DON'T disable controls immediately - let animation play first
-        // DisablePlayerControls(); // Move this to later
-
-        // Play the death animation - RESET ALL OTHER ANIMATION PARAMETERS FIRST
+    
         if (animator != null)
         {
             // Reset all other animation bools that might interfere
@@ -63,19 +58,15 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
             animator.SetFloat("aimX", 0);
             animator.SetFloat("aimY", 0);
 
-            // NOW set the death parameter
+
             animator.SetBool("isDead", true);
 
             Debug.Log("Playing death animation: " + deathAnimationName);
         }
 
-        // Start monitoring the animation and handle the sequence
         StartCoroutine(HandleDeathSequence());
     }
 
-    /// <summary>
-    /// Disables player movement and combat to prevent actions during death
-    /// </summary>
     private void DisablePlayerControls()
     {
         // Disable movement
@@ -110,11 +101,11 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            rb.velocity = Vector2.zero; // Changed from linearVelocity
+            rb.velocity = Vector2.zero; 
             rb.isKinematic = true;
         }
 
-        // Disable collider to prevent further interactions
+
         Collider2D col = GetComponent<Collider2D>();
         if (col != null)
         {
@@ -122,15 +113,13 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
         }
     }
 
-    /// <summary>
-    /// Handles the complete death sequence: animation first, then death effect
-    /// </summary>
+
     private IEnumerator HandleDeathSequence()
     {
-        // Wait a small amount to let the animation start
+    
         yield return new WaitForSeconds(0.1f);
 
-        // Wait for the death animation to complete OR use the delay timer
+
         float animationWaitTime = GetAnimationLength();
 
         if (animationWaitTime > 0)
@@ -140,11 +129,11 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
         }
         else
         {
-            // Fallback to manual delay
+        
             yield return new WaitForSeconds(deathEffectDelay);
         }
 
-        // NOW disable player controls (after animation completes)
+
         DisablePlayerControls();
 
         // Start the death effect
@@ -154,14 +143,12 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
         }
     }
 
-    /// <summary>
-    /// Gets the length of the death animation
-    /// </summary>
+
     private float GetAnimationLength()
     {
         if (animator == null) return 0f;
 
-        // Try to get the animation clip length
+  
         RuntimeAnimatorController ac = animator.runtimeAnimatorController;
         if (ac != null)
         {
@@ -177,31 +164,25 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
         return 0f; // Couldn't find the animation
     }
 
-    /// <summary>
-    /// Call this from an Animation Event if you want precise timing control
-    /// </summary>
+
     public void OnDeathAnimationComplete()
     {
         Debug.Log("Death animation completed");
 
-        // Start death effect immediately if not already started
+
         if (!autoStartDeathEffect && deathEffect != null)
         {
             deathEffect.StartDeathEffect();
         }
     }
 
-    /// <summary>
-    /// Call this from an Animation Event to disable controls at a specific time
-    /// </summary>
+
     public void DisablePlayerControlsDelayed()
     {
         DisablePlayerControls();
     }
 
-    /// <summary>
-    /// Call this from an Animation Event at the perfect moment to start death effect
-    /// </summary>
+
     public void TriggerDeathEffect()
     {
         if (deathEffect != null)
@@ -210,9 +191,6 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
         }
     }
 
-    /// <summary>
-    /// Reset the death state (useful for respawning or restarting)
-    /// </summary>
     public void ResetDeathState()
     {
         isPlayingDeathAnimation = false;
@@ -222,21 +200,16 @@ public class PlayerDead : MonoBehaviour // Changed class name from PlayerDeathAn
             animator.SetBool("isDead", false);
         }
 
-        // Re-enable components if needed
-        // Note: You might want to handle respawning logic elsewhere
+
     }
 
-    /// <summary>
-    /// Check if the death animation is currently playing
-    /// </summary>
+
     public bool IsPlayingDeathAnimation()
     {
         return isPlayingDeathAnimation;
     }
 
-    /// <summary>
-    /// Get the current animation state info for the death animation
-    /// </summary>
+
     public bool IsDeathAnimationFinished()
     {
         if (animator == null) return true;
